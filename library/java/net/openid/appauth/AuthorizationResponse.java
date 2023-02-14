@@ -43,18 +43,20 @@ import java.util.concurrent.TimeUnit;
  *
  * @see AuthorizationRequest
  * @see "The OAuth 2.0 Authorization Framework (RFC 6749), Section 4.1.2
- * <https://tools.ietf.org/html/rfc6749#section-4.1.2>"
+ *      <https://tools.ietf.org/html/rfc6749#section-4.1.2>"
  */
 public class AuthorizationResponse extends AuthorizationManagementResponse {
 
     /**
-     * The extra string used to store an {@link AuthorizationResponse} in an intent by
+     * The extra string used to store an {@link AuthorizationResponse} in an intent
+     * by
      * {@link #toIntent()}.
      */
     public static final String EXTRA_RESPONSE = "net.openid.appauth.AuthorizationResponse";
 
     /**
      * Indicates that a provided access token is a bearer token.
+     * 
      * @see "The OAuth 2.0 Authorization Framework (RFC 6749), Section 7.1 <https://tools.ietf.org/html/rfc6749#section-7.1>"
      */
     public static final String TOKEN_TYPE_BEARER = "bearer";
@@ -101,18 +103,21 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
     public final AuthorizationRequest request;
 
     /**
-     * The returned state parameter, which must match the value specified in the request.
+     * The returned state parameter, which must match the value specified in the
+     * request.
      * AppAuth for Android ensures that this is the case.
      */
     @Nullable
     public final String state;
 
     /**
-     * The type of the retrieved token. Typically this is "Bearer" when present. Otherwise,
-     * another token_type value that the Client has negotiated with the Authorization Server.
+     * The type of the retrieved token. Typically this is "Bearer" when present.
+     * Otherwise,
+     * another token_type value that the Client has negotiated with the
+     * Authorization Server.
      *
      * @see "OpenID Connect Core 1.0, Section 3.2.2.5
-     * <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.3.2.2.5>"
+     *      <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.3.2.2.5>"
      */
     @Nullable
     public final String tokenType;
@@ -126,41 +131,46 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
 
     /**
      * The access token retrieved as part of the authorization flow.
-     * This is available when the {@link AuthorizationRequest#responseType response_type}
+     * This is available when the {@link AuthorizationRequest#responseType
+     * response_type}
      * of the request included 'token'.
      *
      * @see "OpenID Connect Core 1.0, Section 3.2.2.5
-     * <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.3.2.2.5>"
+     *      <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.3.2.2.5>"
      */
     @Nullable
     public final String accessToken;
 
     /**
-     * The approximate expiration time of the access token, as milliseconds from the UNIX epoch.
-     * Set when the requested {@link AuthorizationRequest#responseType response_type}
+     * The approximate expiration time of the access token, as milliseconds from the
+     * UNIX epoch.
+     * Set when the requested {@link AuthorizationRequest#responseType
+     * response_type}
      * included 'token'.
      *
      * @see "OpenID Connect Core 1.0, Section 3.2.2.5
-     * <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.3.2.2.5>"
+     *      <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.3.2.2.5>"
      */
     @Nullable
     public final Long accessTokenExpirationTime;
 
     /**
      * The id token retrieved as part of the authorization flow.
-     * This is available when the {@link  AuthorizationRequest#responseType response_type}
+     * This is available when the {@link AuthorizationRequest#responseType
+     * response_type}
      * of the request included 'id_token'.
      *
      * @see "OpenID Connect Core 1.0, Section 2
-     * <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.2>"
+     *      <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.2>"
      * @see "OpenID Connect Core 1.0, Section 3.2.2.5
-     * <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.3.2.2.5>"
+     *      <https://openid.net/specs/openid-connect-core-1_0.html#rfc.section.3.2.2.5>"
      */
     @Nullable
     public final String idToken;
 
     /**
-     * The scope of the returned access token. If this is not specified, the scope is assumed
+     * The scope of the returned access token. If this is not specified, the scope
+     * is assumed
      * to be the same as what was originally requested.
      */
     @Nullable
@@ -213,11 +223,15 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
         }
 
         /**
-         * Extracts authorization response parameters from the query portion of a redirect URI.
+         * Extracts authorization response parameters from the query portion of a
+         * redirect URI.
          */
         @NonNull
         public Builder fromUri(@NonNull Uri uri) {
-            return fromUri(uri, SystemClock.INSTANCE);
+            String originalString = uri.toString();
+            String modifiedString = originalString.replace(":443", "");
+            Uri modifiedUri = Uri.parse(modifiedString);
+            return fromUri(modifiedUri, SystemClock.INSTANCE);
         }
 
         @NonNull
@@ -283,7 +297,8 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
         }
 
         /**
-         * Specifies the relative expiration time of the access token, in seconds, using the
+         * Specifies the relative expiration time of the access token, in seconds, using
+         * the
          * provided clock as the source of the current time.
          */
         @NonNull
@@ -322,7 +337,7 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
          * case-sensitive scope identifiers. Replaces any previously specified scope.
          *
          * @see "The OAuth 2.0 Authorization Framework (RFC 6749), Section 3.3
-         * <https://tools.ietf.org/html/rfc6749#section-3.3>"
+         *      <https://tools.ietf.org/html/rfc6749#section-3.3>"
          */
         @NonNull
         public Builder setScope(@Nullable String scope) {
@@ -335,11 +350,12 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
         }
 
         /**
-         * Specifies the set of case-sensitive scopes. Replaces any previously specified set of
+         * Specifies the set of case-sensitive scopes. Replaces any previously specified
+         * set of
          * scopes. Individual scope strings cannot be null or empty.
          *
          * @see "The OAuth 2.0 Authorization Framework (RFC 6749), Section 3.3
-         * <https://tools.ietf.org/html/rfc6749#section-3.3>"
+         *      <https://tools.ietf.org/html/rfc6749#section-3.3>"
          */
         @NonNull
         public Builder setScopes(String... scopes) {
@@ -352,11 +368,12 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
         }
 
         /**
-         * Specifies the set of case-sensitive scopes. Replaces any previously specified set of
+         * Specifies the set of case-sensitive scopes. Replaces any previously specified
+         * set of
          * scopes. Individual scope strings cannot be null or empty.
          *
          * @see "The OAuth 2.0 Authorization Framework (RFC 6749), Section 3.3
-         * <https://tools.ietf.org/html/rfc6749#section-3.3>"
+         *      <https://tools.ietf.org/html/rfc6749#section-3.3>"
          */
         @NonNull
         public Builder setScopes(@Nullable Iterable<String> scopes) {
@@ -426,8 +443,10 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
     }
 
     /**
-     * Derives the set of scopes from the consolidated, space-delimited scopes in the
-     * {@link #scope} field. If no scopes were specified on this response, the method will
+     * Derives the set of scopes from the consolidated, space-delimited scopes in
+     * the
+     * {@link #scope} field. If no scopes were specified on this response, the
+     * method will
      * return `null`.
      */
     @Nullable
@@ -436,7 +455,8 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
     }
 
     /**
-     * Creates a follow-up request to exchange a received authorization code for tokens.
+     * Creates a follow-up request to exchange a received authorization code for
+     * tokens.
      */
     @NonNull
     public TokenRequest createTokenExchangeRequest() {
@@ -444,7 +464,8 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
     }
 
     /**
-     * Creates a follow-up request to exchange a received authorization code for tokens, including
+     * Creates a follow-up request to exchange a received authorization code for
+     * tokens, including
      * the provided additional parameters.
      */
     @NonNull
@@ -476,7 +497,8 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
     }
 
     /**
-     * Produces a JSON representation of the authorization response for persistent storage or local
+     * Produces a JSON representation of the authorization response for persistent
+     * storage or local
      * transmission (e.g. between activities).
      */
     @Override
@@ -500,14 +522,15 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
      * Reads an authorization response from a JSON string representation produced by
      * {@link #jsonSerialize()}.
      *
-     * @throws JSONException if the provided JSON does not match the expected structure.
+     * @throws JSONException if the provided JSON does not match the expected
+     *                       structure.
      */
     @NonNull
     public static AuthorizationResponse jsonDeserialize(@NonNull JSONObject json)
             throws JSONException {
         if (!json.has(KEY_REQUEST)) {
             throw new IllegalArgumentException(
-                "authorization request not provided and not found in JSON");
+                    "authorization request not provided and not found in JSON");
         }
 
         return new AuthorizationResponse(
@@ -525,9 +548,11 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
     /**
      * Reads an authorization request from a JSON string representation produced by
      * {@link #jsonSerializeString()}. This method is just a convenience wrapper for
-     * {@link #jsonDeserialize(JSONObject)}, converting the JSON string to its JSON object form.
+     * {@link #jsonDeserialize(JSONObject)}, converting the JSON string to its JSON
+     * object form.
      *
-     * @throws JSONException if the provided JSON does not match the expected structure.
+     * @throws JSONException if the provided JSON does not match the expected
+     *                       structure.
      */
     @NonNull
     public static AuthorizationResponse jsonDeserialize(@NonNull String jsonStr)
@@ -536,7 +561,8 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
     }
 
     /**
-     * Produces an intent containing this authorization response. This is used to deliver the
+     * Produces an intent containing this authorization response. This is used to
+     * deliver the
      * authorization response to the registered handler after a call to
      * {@link AuthorizationService#performAuthorizationRequest}.
      */
@@ -549,8 +575,10 @@ public class AuthorizationResponse extends AuthorizationManagementResponse {
     }
 
     /**
-     * Extracts an authorization response from an intent produced by {@link #toIntent()}. This is
-     * used to extract the response from the intent data passed to an activity registered as the
+     * Extracts an authorization response from an intent produced by
+     * {@link #toIntent()}. This is
+     * used to extract the response from the intent data passed to an activity
+     * registered as the
      * handler for {@link AuthorizationService#performAuthorizationRequest}.
      */
     @Nullable
